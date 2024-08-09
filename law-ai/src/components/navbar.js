@@ -35,7 +35,7 @@ const Navbar = () => {
       <div className="flex items-center">
         <BookOutlined className="text-gray-500" style={{ fontSize: 24 }} />
         <Link href="/">
-          <span className="ml-4 text-lg text-gray-500">Law AI</span>
+          <span className="ml-4 text-lg font-semibold text-gray-500">Law AI</span>
         </Link>
       </div>
       <Dropdown overlay={menu} trigger={['click']}>

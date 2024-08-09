@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input, Button } from 'antd';
 import { SearchOutlined, SendOutlined } from '@ant-design/icons';
+import 'tailwindcss/tailwind.css';
 
 const { TextArea } = Input;
 
@@ -14,57 +15,33 @@ const SearchBar = () => {
   const isButtonDisabled = inputValue.trim() === '';
 
   return (
-    <div
-      style={{
-        width: 900, // Adjust the width as needed
-        height: 450, // Adjust the height as needed
-        backgroundColor: 'white',
-        padding: 16,
-        borderRadius: 8,
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          marginBottom: 16,
-        }}
-      >
-        <SearchOutlined style={{ fontSize: 20, marginRight: 8 }} />
-        <span style={{ fontSize: 20, fontWeight: 'bold' }}>Cari Hukum</span>
+    <div className="w-[900px] h-full bg-white p-4 rounded-lg shadow-lg">
+      <div className="flex items-center mb-4">
+        <SearchOutlined className="text-gray-500 text-md mr-2" />
+        <span className="text-md font-medium text-gray-500">Cari Hukum</span>
       </div>
       <TextArea
         placeholder="Tanyakan sebuah pertanyaan tentang hukum di Indonesia."
-        rows={4} // Adjust the number of rows as needed
-        style={{
-          width: '100%',
-          height: '75%', // Adjust the height to fit your design
-          padding: 12,
-          resize: 'none', // Prevent manual resizing
-          overflow: 'auto', // Enable scroll if necessary
-        }}
+        rows={5} // Adjust the number of rows as needed
+        className="w-full h-[75%] p-2 resize-none overflow-auto border-0 outline-none hover:border-none focus:border-none focus:outline-none focus:ring-0"
         value={inputValue}
         onChange={handleInputChange}
+        style={{ resize: 'none' }} // Disable resizing
       />
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginTop: 16,
-        }}
-      >
+      <div className="flex justify-end mt-4">
         <Button
-          type="primary"
           size="large"
           disabled={isButtonDisabled}
+          className={`flex items-center transition-colors ${
+            isButtonDisabled
+              ? 'bg-gray-500 border-0 text-gray-700'
+              : 'bg-black border-black text-white hover:bg-gray-800'
+          }`}
           style={{
-            backgroundColor: isButtonDisabled ? 'gray' : 'black',
             borderColor: isButtonDisabled ? 'gray' : 'black',
           }}
         >
-          <SendOutlined style={{ fontSize: 18, marginRight: 8 }} />
+          <SendOutlined className="text-lg mr-2" />
           Kirim
         </Button>
       </div>
