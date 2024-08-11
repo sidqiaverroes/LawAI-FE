@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import SearchBar from "@/components/SearchBar"; // Import the SearchBar component
 import ResultComponent from '@/components/ResultComponent';
 import 'antd/dist/reset.css'; // Ensure Ant Design styles are applied
+import ProtectedPage from "@/components/ProtectedPage";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+const Home = () => {
   const [apiResponse, setApiResponse] = useState(null);
 
   const handleApiResponse = (data) => {
@@ -25,3 +26,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default ProtectedPage(Home);

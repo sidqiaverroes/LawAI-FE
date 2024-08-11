@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Menu, Dropdown } from 'antd';
 import { UserOutlined, BookOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 
 const { Header } = Layout;
 
 const Navbar = () => {
+  const { username, logout } = useAuth(); // Get username and logout function from context
+  const router = useRouter();
+
+  useEffect(() => {
+    // Optionally, you can add logic here to perform actions when the username changes
+  }, [username]);
+
   const handleMenuClick = (e) => {
     if (e.key === 'logout') {
-      // Handle logout logic here
-      console.log('Logging out...');
+      // Call logout function from context
+      logout();
+      // Redirect to the login page
+      router.push('/auth');
     }
   };
 
@@ -53,7 +64,7 @@ const Navbar = () => {
               <UserOutlined className="text-gray-500" style={{ fontSize: 16 }} />
             </div>
           )}
-          <span className="ml-2 text-md text-gray-500">Username</span>
+          <span className="ml-2 text-md text-gray-500">{username || 'Username'}</span>
         </div>
       </Dropdown>
     </Header>

@@ -1,34 +1,32 @@
-// pages/auth.js
 import React from 'react';
 import { Form, Input, Button, Typography, Tabs, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
 const Auth = () => {
   const [form] = Form.useForm();
-  const router = useRouter(); // Initialize the router here
+  const router = useRouter();
+  const { login } = useAuth();
 
   const handleFinish = async (values) => {
     try {
       // Simulate a delay as if waiting for an actual API response
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       
       // Check if the username and password match the expected values
       if (values.username === 'test' && values.password === 'test123') {
         // Mock successful response data
         const data = {
           access_token: 't1e2s3t',
-          token_type: 'Bearer',
         };
-  
-        // Handle success
-        message.success('Login successful!');
-        console.log('Response data:', data);
 
-        router.push('/');
+        // Handle success
+        login(values.username, data.access_token);
+        message.success('Login successful!');
       } else {
         // Handle failure
         throw new Error('Invalid username or password');
