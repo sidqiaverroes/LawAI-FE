@@ -8,25 +8,29 @@ const { Column } = Table;
 
 const ResultComponent = ({ data }) => {
   // Extract summary and law data from the received data
-  const { full_answers: summary, laws: lawData } = data;
+  const { full_answer: summary, laws: lawData } = data.answer;
+
+  console.log(data);
+  console.log(summary);
+  console.log(lawData);
 
   // Define columns for the table
   const columns = [
     {
-        title: 'Jawaban',
+        title: 'Penjelasan',
         dataIndex: 'jawaban',
         key: 'jawaban',
     },
     {
-      title: 'Judul UU',
-      dataIndex: 'judul_uu',
-      key: 'judul_uu',
+      title: 'Sumber Hukum',
+      dataIndex: 'undang_undang',
+      key: 'undang_undang',
       render: (text, record) => (
         <span className={record.pasal.length > 1 ? 'font-bold' : ''}>{text}</span>
       ),
     },
     {
-        title: 'Bab',
+        title: 'BAB',
         dataIndex: 'bab',
         key: 'bab',
       },
@@ -42,7 +46,7 @@ const ResultComponent = ({ data }) => {
       {/* Summary Section */}
       <div className="mb-6 text-gray-700">
         <h2 className="text-lg font-semibold mb-4">Summary</h2>
-        <div className="prose">
+        <div className="prose text-sm">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {summary}
           </ReactMarkdown>

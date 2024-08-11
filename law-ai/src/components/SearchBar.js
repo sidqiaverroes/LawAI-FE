@@ -5,14 +5,57 @@ import 'tailwindcss/tailwind.css';
 
 const { TextArea } = Input;
 
-const SearchBar = () => {
+const SearchBar = ({ onApiResponse }) => {
   const [inputValue, setInputValue] = React.useState('');
+  const [loadings, setLoadings] = React.useState([]);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const isButtonDisabled = inputValue.trim() === '';
+
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 2000);
+  };
+
+  const handleClick = async () => {
+    if (!isButtonDisabled) {
+      enterLoading(0);
+      try {
+        const response = await fetch('http://localhost:8000/sessions/3/chats/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'followup',
+            question: inputValue,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        onApiResponse(data); // Pass the API response to the parent
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+  };
 
   return (
     <div className="w-[900px] h-full bg-white p-4 rounded-lg shadow-lg">
@@ -22,11 +65,11 @@ const SearchBar = () => {
       </div>
       <TextArea
         placeholder="Tanyakan sebuah pertanyaan tentang hukum di Indonesia."
-        rows={5} // Adjust the number of rows as needed
+        rows={5}
         className="w-full h-[75%] p-2 resize-none overflow-auto border-0 outline-none hover:border-none focus:border-none focus:outline-none focus:ring-0"
         value={inputValue}
         onChange={handleInputChange}
-        style={{ resize: 'none' }} // Disable resizing
+        style={{ resize: 'none' }}
       />
       <div className="flex justify-end mt-4">
         <Button
@@ -40,8 +83,10 @@ const SearchBar = () => {
           style={{
             borderColor: isButtonDisabled ? 'gray' : 'black',
           }}
+          loading={loadings[0]}
+          onClick={handleClick}
+          icon={<SendOutlined className="text-lg" />}
         >
-          <SendOutlined className="text-lg mr-2" />
           Kirim
         </Button>
       </div>
