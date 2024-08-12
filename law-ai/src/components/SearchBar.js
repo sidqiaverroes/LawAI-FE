@@ -40,7 +40,7 @@ const SearchBar = ({ onApiResponse }) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            type: 'followup',
+            type: 'first',
             question: inputValue,
           }),
         });

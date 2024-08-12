@@ -41,7 +41,7 @@ const Auth = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <Title level={2} className="text-center mb-6">Auth</Title>
+        <Title level={2} className="text-center mb-6">Welcome!</Title>
         <Tabs defaultActiveKey="login" centered>
           <TabPane tab="Login" key="login">
             <Form

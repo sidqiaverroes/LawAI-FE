@@ -17,11 +17,11 @@ const Home = () => {
 
   return (
     <div className={`${inter.className} bg-putih`}>
-      <main className="flex flex-col items-center justify-start min-h-screen mt-12 px-4">
+      <main className="flex flex-col items-center justify-start min-h-screen my-12 px-4">
         {/* <div className="mt-12">
           <ChatRooms />
         </div> */}
-        <span className="py-20">
+        <span className="pt-20 pb-12">
           <SearchBar onApiResponse={handleApiResponse} />
         </span>
 

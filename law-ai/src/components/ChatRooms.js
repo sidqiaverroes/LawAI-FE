@@ -6,9 +6,10 @@ import { fetchChatRooms } from '@/lib/api';
 
 const { TabPane } = Tabs;
 
-const ChatRooms = () => {
+const ChatRooms = ({ resetActiveKey }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeKey, setActiveKey] = useState(null); // Internal state for active key
   const router = useRouter();
 
   useEffect(() => {
@@ -26,15 +27,24 @@ const ChatRooms = () => {
     getChatRooms();
   }, []);
 
+  useEffect(() => {
+    if (resetActiveKey) {
+      setActiveKey(null); // Reset the activeKey when resetActiveKey changes
+    }
+  }, [resetActiveKey]);
+
   const handleTabChange = (key) => {
-    // Redirect to /chat/{id} for the selected room
-    router.push(`/chat/${key}`);
+    setActiveKey(key); // Set the active key when tab changes
+    router.push(`/chat/${key}`); // Redirect to the selected chat room
   };
 
   if (loading) return <Spin tip="Loading chat rooms..." />;
 
   return (
-    <Tabs defaultActiveKey="1" onChange={handleTabChange}>
+    <Tabs
+      activeKey={activeKey}
+      onChange={handleTabChange}
+    >
       {chatRooms.map((room) => (
         <TabPane tab={room.name} key={room.id}>
           {/* Content for the selected chat room will be shown on /chat/{id} */}
