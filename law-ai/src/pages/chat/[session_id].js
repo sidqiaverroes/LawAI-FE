@@ -1,8 +1,8 @@
-// pages/chat/[session_id].js
 import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Spin, message, Button, Input } from 'antd';
 import { SendOutlined } from '@ant-design/icons'; // Import the Send icon
+import Cookies from 'js-cookie'; // Import js-cookie for token retrieval
 import { fetchChatMessages } from '@/lib/api'; // Ensure this function is defined
 import ChatMessageComponent from '@/components/ChatMessageComponent';
 
@@ -14,6 +14,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState('');
+  const [sending, setSending] = useState(false); // State for button loading
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -33,10 +34,38 @@ const ChatPage = () => {
     }
   }, [session_id]);
 
-  const handleSend = () => {
-    // Handle sending the message
-    console.log('Sending message:', newMessage);
-    setNewMessage(''); // Clear the input after sending
+  const handleSend = async () => {
+    if (newMessage.trim() === '') return; // Avoid sending empty messages
+
+    setSending(true); // Set sending to true when starting to send
+    try {
+      const token = Cookies.get('access_token'); // Retrieve token from cookies
+
+      const response = await fetch(`https://deekyudev.my.id/sessions/${session_id}/chats/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Include token in the Authorization header
+        },
+        body: JSON.stringify({
+          type: 'followup',
+          question: newMessage, // Use newMessage as the question
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      const chatResponse = await response.json();
+      setMessages([...messages, chatResponse]); // Update messages with the new response
+      setNewMessage(''); // Clear the input after sending
+    } catch (error) {
+      message.error('Failed to send message');
+      console.error('Error sending message:', error);
+    } finally {
+      setSending(false); // Set sending to false when done
+    }
   };
 
   const handleChange = (e) => {
@@ -64,7 +93,13 @@ const ChatPage = () => {
           className="resize-none mr-3 border-0 outline-none hover:border-none focus:border-none focus:outline-none focus:ring-0"
           style={{ width: '900px' }}
         />
-        <Button onClick={handleSend} type="primary" className="self-end" icon={<SendOutlined />} />
+        <Button
+          onClick={handleSend}
+          type="primary"
+          className="self-end"
+          icon={<SendOutlined />}
+          loading={sending} // Show loading state when sending is true
+        />
       </div>
     </div>
   );

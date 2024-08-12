@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, Input, Button, Typography, Tabs, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
-import { useAuth } from '../contexts/AuthContext';
+import Cookies from 'js-cookie';
+import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -10,29 +11,34 @@ const { TabPane } = Tabs;
 const Auth = () => {
   const [form] = Form.useForm();
   const router = useRouter();
-  const { login } = useAuth();
+  const { login } = useAuth(); // Destructure login from useAuth
 
   const handleFinish = async (values) => {
     try {
-      // Simulate a delay as if waiting for an actual API response
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      
-      // Check if the username and password match the expected values
-      if (values.username === 'test' && values.password === 'test123') {
-        // Mock successful response data
-        const data = {
-          access_token: 't1e2s3t',
-        };
+      const response = await fetch('https://deekyudev.my.id/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+        credentials: 'include',
+      });
 
-        // Handle success
-        login(values.username, data.access_token);
-        message.success('Login successful!');
-      } else {
-        // Handle failure
+      if (!response.ok) {
         throw new Error('Invalid username or password');
       }
+
+      const data = await response.json();
+
+      // Store token in cookies
+      Cookies.set('access_token', data.access_token, { expires: 1, secure: true, sameSite: 'Lax' });
+
+      // Update auth context
+      login(values.username, data.access_token);
+
+      message.success('Login successful!');
+      router.push('/');
     } catch (error) {
-      // Handle errors
       message.error('Login failed!');
       console.error('Error:', error);
     }

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Spin, message } from 'antd';
 import { useRouter } from 'next/router';
-import { fetchChatRooms } from '@/lib/api';
+import Cookies from 'js-cookie';
 
 const { TabPane } = Tabs;
 
@@ -15,11 +15,26 @@ const ChatRooms = ({ resetActiveKey }) => {
   useEffect(() => {
     const getChatRooms = async () => {
       try {
-        const rooms = await fetchChatRooms();
+
+        console.log("getting chats");
+        const token = Cookies.get('access_token'); // Retrieve token from cookies
+
+        const response = await fetch('https://deekyudev.my.id/sessions', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include token in the Authorization header
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch chat rooms');
+        }
+
+        const rooms = await response.json();
+        console.log(rooms);
         setChatRooms(rooms);
         setLoading(false);
       } catch (error) {
-        message.error('Failed to load chat rooms');
         setLoading(false);
       }
     };

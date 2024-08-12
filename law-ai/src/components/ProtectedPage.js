@@ -1,21 +1,24 @@
-import { useAuth } from '@/contexts/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const ProtectedPage = (WrappedComponent) => {
   return (props) => {
-    const { token } = useAuth(); // Access token from AuthContext
+    const token = Cookies.get('access_token');
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //   if (!token) {
-    //     router.push('/auth'); // Redirect to login if not authenticated
-    //   }
-    // }, [token, router]);
+    useEffect(() => {
+      if (!token) {
+        router.push('/auth'); // Redirect to login if not authenticated
+      } else {
+        setLoading(false); // Set loading to false once authentication is confirmed
+      }
+    }, [token, router]);
 
-    // if (!token) {
-    //   return <p>Loading...</p>; // Show loading message or spinner while redirecting
-    // }
+    if (loading) {
+      return <p>Loading...</p>; // Show loading message or spinner while redirecting
+    }
 
     return <WrappedComponent {...props} />;
   };

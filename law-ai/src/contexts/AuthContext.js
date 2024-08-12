@@ -1,5 +1,7 @@
+// /contexts/AuthContext.js
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
 
@@ -9,9 +11,8 @@ export const AuthProvider = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // Check session on initial load
-    const storedUsername = localStorage.getItem('username');
-    const storedToken = localStorage.getItem('access_token');
+    const storedUsername = Cookies.get('username');
+    const storedToken = Cookies.get('access_token');
     if (storedUsername && storedToken) {
       setUsername(storedUsername);
       setToken(storedToken);
@@ -22,16 +23,16 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (username, token) => {
-    localStorage.setItem('username', username);
-    localStorage.setItem('access_token', token);
+    Cookies.set('username', username, { expires: 1, secure: true, sameSite: 'Lax' });
+    Cookies.set('access_token', token, { expires: 1, secure: true, sameSite: 'Lax' });
     setUsername(username);
     setToken(token);
     router.push('/');
   };
 
   const logout = () => {
-    localStorage.removeItem('username');
-    localStorage.removeItem('access_token');
+    Cookies.remove('username');
+    Cookies.remove('access_token');
     setUsername('');
     setToken(null);
     router.push('/auth');

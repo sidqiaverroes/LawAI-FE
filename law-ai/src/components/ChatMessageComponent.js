@@ -15,7 +15,7 @@ const ChatMessageComponent = ({ data }) => {
     <div className="w-[900px] mb-12">
       {/* Question Section */}
       <div className='flex justify-end mb-6'>
-        <div className="">
+        <div className="flex h-auto justify-end items-center bg-white shadow-md rounded-t-xl rounded-bl-xl px-4 py-3">
           <p className="text-sm text-gray-600">{question}</p>
         </div>
       </div>

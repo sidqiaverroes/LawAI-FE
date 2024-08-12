@@ -2,6 +2,7 @@ import React from 'react';
 import { Input, Button } from 'antd';
 import { SearchOutlined, SendOutlined } from '@ant-design/icons';
 import 'tailwindcss/tailwind.css';
+import Cookies from 'js-cookie'; // Import Cookies to retrieve token
 
 const { TextArea } = Input;
 
@@ -34,28 +35,50 @@ const SearchBar = ({ onApiResponse }) => {
     if (!isButtonDisabled) {
       enterLoading(0);
       try {
-        const response = await fetch('https://deekyudev.my.id/sessions/3/chats/', {
+        const token = Cookies.get('access_token'); // Retrieve token from cookies
+  
+        // Step 1: Create a new session
+        const createSessionResponse = await fetch('https://deekyudev.my.id/sessions/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Include token in the Authorization header
+          },
+          body: JSON.stringify({ name: 'new chat' }), // Default session name
+        });
+  
+        if (!createSessionResponse.ok) {
+          throw new Error('Failed to create session');
+        }
+  
+        const sessionData = await createSessionResponse.json();
+        const sessionId = sessionData.id; // Extract session ID from the response
+  
+        // Step 2: Fetch chat data
+        const chatResponse = await fetch(`https://deekyudev.my.id/sessions/${sessionId}/chats/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Include token in the Authorization header
           },
           body: JSON.stringify({
             type: 'first',
             question: inputValue,
           }),
         });
-
-        if (!response.ok) {
+  
+        if (!chatResponse.ok) {
           throw new Error('Network response was not ok');
         }
-
-        const data = await response.json();
+  
+        const data = await chatResponse.json();
         onApiResponse(data); // Pass the API response to the parent
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
   };
+  
 
   return (
     <div className="w-[900px] h-full bg-white p-4 rounded-lg shadow-lg">
