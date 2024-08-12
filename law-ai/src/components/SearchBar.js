@@ -34,7 +34,7 @@ const SearchBar = ({ onApiResponse }) => {
     if (!isButtonDisabled) {
       enterLoading(0);
       try {
-        const response = await fetch('http://localhost:8000/sessions/3/chats/', {
+        const response = await fetch('https://deekyudev.my.id/sessions/3/chats/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
