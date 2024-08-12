@@ -7,15 +7,15 @@ const ProtectedPage = (WrappedComponent) => {
     const { token } = useAuth(); // Access token from AuthContext
     const router = useRouter();
 
-    useEffect(() => {
-      if (!token) {
-        router.push('/auth'); // Redirect to login if not authenticated
-      }
-    }, [token, router]);
+    // useEffect(() => {
+    //   if (!token) {
+    //     router.push('/auth'); // Redirect to login if not authenticated
+    //   }
+    // }, [token, router]);
 
-    if (!token) {
-      return <p>Loading...</p>; // Show loading message or spinner while redirecting
-    }
+    // if (!token) {
+    //   return <p>Loading...</p>; // Show loading message or spinner while redirecting
+    // }
 
     return <WrappedComponent {...props} />;
   };

@@ -1,10 +1,12 @@
+// components/Navbar.js
 import React, { useEffect } from 'react';
 import { Layout, Menu, Dropdown } from 'antd';
-import { UserOutlined, BookOutlined } from '@ant-design/icons';
+import { UserOutlined, BookOutlined, PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext'; // Import useAuth
+import ChatRooms from './ChatRooms';
 
 const { Header } = Layout;
 
@@ -42,15 +44,26 @@ const Navbar = () => {
   );
 
   return (
-    <Header className="bg-putih text-black flex justify-between items-center p-4 px-96 fixed top-0 left-0 w-full z-10">
-      <div className="flex items-center">
+    <Header className="bg-putih text-black flex items-center justify-between px-96 pt-2 fixed top-0 left-0 w-full z-10 h-auto">
+      <div className="flex items-center flex-shrink-0 pb-4">
         <BookOutlined className="text-gray-500" style={{ fontSize: 24 }} />
         <Link href="/">
           <span className="ml-4 text-lg font-semibold text-gray-500">Law AI</span>
         </Link>
+        
       </div>
+
+      <Link href="/" className="inline-flex items-center px-3 py-3 mb-2 bg-white rounded-full shadow-sm hover:bg-gray-100">
+          <PlusOutlined className="text-gray-500" style={{ fontSize: 16 }} />
+          <span className="ml-2 text-sm text-gray-500">New Chat</span>
+        </Link>
+
+      <div className="flex items-center max-w-lg overflow-x-auto whitespace-nowrap">
+        <ChatRooms />
+      </div>
+      
       <Dropdown overlay={menu} trigger={['click']}>
-        <div className="flex items-center cursor-pointer">
+        <div className="flex items-center cursor-pointer pb-4">
           {profilePicPath ? (
             <Image
               src={profilePicPath} // Replace with your profile picture path
