@@ -5,6 +5,7 @@ import { SendOutlined } from '@ant-design/icons'; // Import the Send icon
 import Cookies from 'js-cookie'; // Import js-cookie for token retrieval
 import { fetchChatMessages } from '@/lib/api'; // Ensure this function is defined
 import ChatMessageComponent from '@/components/ChatMessageComponent';
+import ProtectedPage from '@/components/ProtectedPage';
 
 const { TextArea } = Input;
 
@@ -76,7 +77,7 @@ const ChatPage = () => {
 
   return (
     <div className="relative flex flex-col min-h-screen items-center">
-      <div className="flex-1 overflow-y-auto bg-putih pt-24 pb-16">
+      <div className="flex-1 overflow-y-auto bg-putih pt-32 pb-16">
         {messages.map((message) => (
           <ChatMessageComponent key={message.id} data={message} />
         ))}
@@ -106,4 +107,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default ProtectedPage(ChatPage);

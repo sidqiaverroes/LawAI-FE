@@ -2,7 +2,6 @@ import { Inter } from "next/font/google";
 import React, { useState } from 'react';
 import SearchBar from "@/components/SearchBar";
 import ResultComponent from '@/components/ResultComponent';
-import ChatRooms from '@/components/ChatRooms'; // Import the ChatRooms component
 import 'antd/dist/reset.css';
 import ProtectedPage from "@/components/ProtectedPage";
 
@@ -26,8 +25,6 @@ const Home = () => {
         </span>
 
         {apiResponse && <ResultComponent data={apiResponse} />}
-        
-        {/* Add ChatRooms component here */}
       </main>
     </div>
   );

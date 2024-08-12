@@ -16,6 +16,8 @@ const ChatRooms = ({ resetActiveKey }) => {
   const [newRoomName, setNewRoomName] = useState(''); // State to handle room name input
   const router = useRouter();
 
+  const maxLength = 15; // Maximum number of characters to display in the tab
+
   const getChatRooms = async () => {
     try {
       const token = Cookies.get('access_token'); // Retrieve token from cookies
@@ -121,28 +123,30 @@ const ChatRooms = ({ resetActiveKey }) => {
 
   return (
     <>
-      <Tabs
-        activeKey={activeKey}
-        onChange={handleTabChange}
-      >
-        {chatRooms.map((room) => (
-          <TabPane
-            tab={
-              <div className="flex items-center">
-                {room.name}
-                <Button
-                  type="text"
-                  icon={<EllipsisOutlined />}
-                  onClick={() => handleOptionsClick(room)}
-                  className="ml-2"
-                />
-              </div>
-            }
-            key={room.id}
-          >
-            {/* Content for the selected chat room will be shown on /chat/{id} */}
-          </TabPane>
-        ))}
+      <Tabs activeKey={activeKey} onChange={handleTabChange}>
+        {chatRooms.map((room) => {
+          // Truncate and concatenate the room name
+          const displayName = room.name.length > maxLength ? room.name.substring(0, maxLength) + '...' : room.name;
+
+          return (
+            <TabPane
+              tab={
+                <div className="flex items-center">
+                  {displayName}
+                  <Button
+                    type="text"
+                    icon={<EllipsisOutlined />}
+                    onClick={() => handleOptionsClick(room)}
+                    className="ml-2"
+                  />
+                </div>
+              }
+              key={room.id}
+            >
+              {/* Content for the selected chat room will be shown on /chat/{id} */}
+            </TabPane>
+          );
+        })}
       </Tabs>
 
       <Modal

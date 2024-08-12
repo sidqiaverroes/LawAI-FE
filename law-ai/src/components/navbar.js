@@ -72,11 +72,11 @@ const Navbar = () => {
 
   const menu = (
     <Menu onClick={handleMenuClick} theme="light">
-      <Menu.Item key="settings">
+      {/* <Menu.Item key="settings">
         <Link href="/account/settings">
           <span>Account Settings</span>
         </Link>
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key="logout">
         <span>Logout</span>
       </Menu.Item>
@@ -104,9 +104,10 @@ const Navbar = () => {
         {loading ? (
           <Spin tip="Loading chat rooms..." className="mr-4" />
         ) : chatRooms.length > 0 ? (
-          <div className="flex items-center max-w-lg overflow-x-auto whitespace-nowrap">
+          <div className="flex items-center max-w-lg overflow-auto whitespace-nowrap">
             <ChatRooms resetActiveKey={resetActiveKey} />
           </div>
+
         ) : null}
 
         <Dropdown overlay={menu} trigger={['click']}>

@@ -22,7 +22,10 @@ const SearchBar = ({ onApiResponse }) => {
     setLoading(true); // Set loading to true when starting to send
     try {
       const token = Cookies.get('access_token'); // Retrieve token from cookies
-  
+
+      // Extract the first few words for the session name
+      const sessionName = inputValue.split(' ').slice(0, 4).join(' ') || 'new chat'; // Default to 'new chat' if empty
+
       // Step 1: Create a new session
       const createSessionResponse = await fetch('https://deekyudev.my.id/sessions/', {
         method: 'POST',
@@ -30,16 +33,16 @@ const SearchBar = ({ onApiResponse }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`, // Include token in the Authorization header
         },
-        body: JSON.stringify({ name: 'new chat' }), // Default session name
+        body: JSON.stringify({ name: sessionName }), // Use extracted session name
       });
-  
+
       if (!createSessionResponse.ok) {
         throw new Error('Failed to create session');
       }
-  
+
       const sessionData = await createSessionResponse.json();
       const sessionId = sessionData.id; // Extract session ID from the response
-  
+
       // Step 2: Fetch chat data
       const chatResponse = await fetch(`https://deekyudev.my.id/sessions/${sessionId}/chats/`, {
         method: 'POST',
@@ -52,13 +55,16 @@ const SearchBar = ({ onApiResponse }) => {
           question: inputValue,
         }),
       });
-  
+
       if (!chatResponse.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const data = await chatResponse.json();
       onApiResponse(data); // Pass the API response to the parent
+
+      // Optionally reload the page
+      window.location.reload(); // Reload the page after successful request
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
