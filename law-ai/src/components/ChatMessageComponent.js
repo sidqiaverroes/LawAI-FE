@@ -15,7 +15,7 @@ const ChatMessageComponent = ({ data }) => {
     <div className="w-[900px] mb-12">
       {/* Question Section */}
       <div className='flex justify-end mb-6'>
-        <div className="flex justify-end bg-white shadow-md rounded-t-xl rounded-bl-xl px-6 py-4">
+        <div className="">
           <p className="text-sm text-gray-600">{question}</p>
         </div>
       </div>
@@ -39,7 +39,7 @@ const ChatMessageComponent = ({ data }) => {
               dataIndex: 'undang_undang',
               key: 'undang_undang',
               render: (text, record) => (
-                <span className={record.pasal.length > 1 ? 'font-bold' : ''}>{text}</span>
+                <span className='font-bold'>{text}</span>
               ),
             },
             { title: 'BAB', dataIndex: 'bab', key: 'bab' },
