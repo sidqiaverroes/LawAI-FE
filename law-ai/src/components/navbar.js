@@ -124,7 +124,7 @@ const Navbar = () => {
                 <UserOutlined className="text-gray-500" style={{ fontSize: 16 }} />
               </div>
             )}
-            <span className="ml-2 text-md text-gray-500">{username || 'Sign Up'}</span>
+            <span className="ml-2 text-md text-gray-500">{username || 'username'}</span>
           </div>
         </Dropdown>
       </div>

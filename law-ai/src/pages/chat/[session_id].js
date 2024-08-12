@@ -99,6 +99,7 @@ const ChatPage = () => {
           className="self-end"
           icon={<SendOutlined />}
           loading={sending} // Show loading state when sending is true
+          disabled={newMessage.trim() === ''} // Disable button if newMessage is empty
         />
       </div>
     </div>
