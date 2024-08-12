@@ -64,7 +64,7 @@ const SearchBar = ({ onApiResponse }) => {
       onApiResponse(data); // Pass the API response to the parent
 
       // Optionally reload the page
-      window.location.reload(); // Reload the page after successful request
+      // window.location.reload(); // Reload the page after successful request
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
